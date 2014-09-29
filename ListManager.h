@@ -16,6 +16,7 @@ public:
 public slots:
     void addItem();
     void removeItem();
+
 private:
     QListWidget* _liste;
 
@@ -23,6 +24,8 @@ private:
 
     QPushButton* _btnAdd;
     QPushButton* _btnRemove;
+
+    bool existingItem(QString item);
 };
 
 #endif // LISTMANAGER_H

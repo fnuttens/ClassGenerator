@@ -8,8 +8,10 @@ ListManager::ListManager(QWidget *parent) :
 {
     QVBoxLayout* layout(new QVBoxLayout);
         _liste = new QListWidget;
-        connect(_liste, SIGNAL(doubleClicked(QModelIndex)), _liste, SLOT(edit(QModelIndex)));
+        connect(_liste, SIGNAL(doubleClicked(QModelIndex)),
+                _liste, SLOT(edit(QModelIndex)));
         _editItem = new QLineEdit;
+        connect(_editItem, SIGNAL(editingFinished()), this, SLOT(addItem()));
 
         QHBoxLayout* btnLayout(new QHBoxLayout);
             _btnAdd = new QPushButton("Ajouter");
@@ -28,16 +30,28 @@ ListManager::ListManager(QWidget *parent) :
 
 void ListManager::addItem()
 {
-    QListWidgetItem* newItem(new QListWidgetItem(
-        _editItem->text().isEmpty() ? "[Include item]" :
-                                      _editItem->text()));
+    if(_editItem->text().isEmpty() || existingItem(_editItem->text())) return;
+
+    QListWidgetItem* newItem(new QListWidgetItem(_editItem->text()));
     newItem->setFlags(newItem->flags() | Qt::ItemIsEditable);
 
     _liste->addItem(newItem);
+    _editItem->setText("");
 }
 
 void ListManager::removeItem()
 {
     //TODO: faire fonctionner la suppression
     _liste->removeItemWidget(_liste->currentItem());
+}
+
+bool ListManager::existingItem(QString item)
+{
+    for(int i(0); i < _liste->count(); ++i)
+    {
+        if(item == _liste->item(i)->text())
+            return true;
+    }
+
+    return false;
 }
