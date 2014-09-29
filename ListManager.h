@@ -26,6 +26,7 @@ private:
     QPushButton* _btnRemove;
 
     bool existingItem(QString item);
+    void setValidator();
 };
 
 #endif // LISTMANAGER_H

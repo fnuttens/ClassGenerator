@@ -2,6 +2,9 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QListWidgetItem>
+#include <QString>
+#include <QRegExpValidator>
+#include <QRegExp>
 
 ListManager::ListManager(QWidget *parent) :
     QWidget(parent)
@@ -12,6 +15,7 @@ ListManager::ListManager(QWidget *parent) :
                 _liste, SLOT(edit(QModelIndex)));
         _editItem = new QLineEdit;
         connect(_editItem, SIGNAL(editingFinished()), this, SLOT(addItem()));
+        setValidator();
 
         QHBoxLayout* btnLayout(new QHBoxLayout);
             _btnAdd = new QPushButton("Ajouter");
@@ -30,13 +34,27 @@ ListManager::ListManager(QWidget *parent) :
 
 void ListManager::addItem()
 {
-    if(_editItem->text().isEmpty() || existingItem(_editItem->text())) return;
+    QListWidgetItem* newItem;
 
-    QListWidgetItem* newItem(new QListWidgetItem(_editItem->text()));
+    if(sender() == _editItem || sender() == _btnAdd)
+    {
+        if(_editItem->text().isEmpty() || existingItem(_editItem->text())) return;
+
+        newItem = new QListWidgetItem(_editItem->text());
+        _editItem->setText("");
+    }
+    else
+    {
+        QLineEdit* item = (QLineEdit*)(sender());
+        QString itemName = item->text();
+        if(itemName.isEmpty() || existingItem(itemName))  return;
+
+        newItem = new QListWidgetItem(itemName);
+    }
+
     newItem->setFlags(newItem->flags() | Qt::ItemIsEditable);
-
     _liste->addItem(newItem);
-    _editItem->setText("");
+
 }
 
 void ListManager::removeItem()
@@ -53,4 +71,12 @@ bool ListManager::existingItem(QString item)
     }
 
     return false;
+}
+
+void ListManager::setValidator()
+{
+    QRegExp regex("^[A-Za-z]+\.?[A-Za-z]+$", Qt::CaseSensitive);
+    QRegExpValidator* validator(new QRegExpValidator(regex));
+
+    _editItem->setValidator(validator);
 }

@@ -108,6 +108,7 @@ void MainWindow::setConnections()
     connect(_btnGenerer, SIGNAL(clicked()), this, SLOT(genererCode()));
     connect(_btnQuitter, SIGNAL(clicked()), this, SLOT(close()));
     connect(_ledtClassName, SIGNAL(textEdited(QString)), this, SLOT(genererHeaderGuard()));
+    connect(_ledtSuperClass, SIGNAL(editingFinished()), _lsIncludes, SLOT(addItem()));
 }
 
 /**
