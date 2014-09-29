@@ -41,8 +41,7 @@ void ListManager::addItem()
 
 void ListManager::removeItem()
 {
-    //TODO: faire fonctionner la suppression
-    _liste->removeItemWidget(_liste->currentItem());
+    delete _liste->takeItem(_liste->currentRow());
 }
 
 bool ListManager::existingItem(QString item)
