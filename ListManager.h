@@ -12,6 +12,7 @@ class ListManager : public QWidget
 
 public:
     explicit ListManager(QWidget *parent = 0);
+    QListWidget* getListWidget() const { return _liste; }
 
 public slots:
     void addItem();

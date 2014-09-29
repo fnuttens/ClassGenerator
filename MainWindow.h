@@ -56,6 +56,7 @@ private:
     QString genererHeader();
     QString genererImplementation();
     bool checkFormulaire();
+    void addIncludes(QString& code);
 };
 
 #endif // MAINWINDOW_H

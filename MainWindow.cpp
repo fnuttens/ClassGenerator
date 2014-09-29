@@ -164,6 +164,8 @@ void MainWindow::copyText()
 {
     QTextEdit* currentTxtEdit = (QTextEdit*)_tabs->currentWidget();
     QApplication::clipboard()->setText(currentTxtEdit->toPlainText());
+
+    QMessageBox::information(this, "Copie réussie", "Le code a bien été copié dans le presse-papier.");
 }
 
 /**
@@ -219,6 +221,14 @@ QString MainWindow::genererHeader()
     {
         code += "#ifndef " + _ledtHeaderGuard->text() + "\n";
         code += "#define " + _ledtHeaderGuard->text() + "\n\n";
+    }
+
+    if(_lsIncludes->getListWidget()->count() > 0)
+    {
+        for(int i(0); i < _lsIncludes->getListWidget()->count(); ++i)
+            code += "#include <" + _lsIncludes->getListWidget()->item(i)->text() + ">\n";
+
+        code += "\n";
     }
 
     code += "class " + _ledtClassName->text();
@@ -277,4 +287,9 @@ renseigné de nom pour votre classe.");
     }
 
     return true;
+}
+
+void MainWindow::addIncludes(QString &code)
+{
+
 }
